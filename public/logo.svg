@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 75" fill="none">
+  <!-- Stacked pages / layers icon -->
+  <!-- Bars fanning LEFT of square (lighter, narrowing) -->
+  <rect x="8"  y="26" width="2.5" height="23" rx="1" fill="#FF6B00" opacity="0.25"/>
+  <rect x="13" y="22" width="2.5" height="31" rx="1" fill="#FF6B00" opacity="0.38"/>
+  <rect x="18" y="18" width="2.5" height="39" rx="1" fill="#FF6B00" opacity="0.52"/>
+  <rect x="23" y="14" width="2.5" height="47" rx="1" fill="#FF6B00" opacity="0.68"/>
+  <rect x="28" y="10" width="2.5" height="55" rx="1" fill="#FF6B00" opacity="0.84"/>
+
+  <!-- Solid orange square (center of icon) -->
+  <rect x="33" y="8" width="40" height="59" rx="2" fill="#FF6B00"/>
+
+  <!-- Bars fanning RIGHT of square (getting lighter) -->
+  <rect x="76" y="10" width="2.5" height="55" rx="1" fill="#FF6B00" opacity="0.84"/>
+  <rect x="81" y="14" width="2.5" height="47" rx="1" fill="#FF6B00" opacity="0.68"/>
+  <rect x="86" y="18" width="2.5" height="39" rx="1" fill="#FF6B00" opacity="0.52"/>
+  <rect x="91" y="22" width="2.5" height="31" rx="1" fill="#FF6B00" opacity="0.38"/>
+  <rect x="96" y="26" width="2.5" height="23" rx="1" fill="#FF6B00" opacity="0.25"/>
+
+  <!-- Company name text -->
+  <text x="112" y="37" font-family="Raleway, sans-serif" font-weight="800" font-size="23" fill="#FFFFFF" letter-spacing="0.3">Stack Down</text>
+  <text x="112" y="58" font-family="Raleway, sans-serif" font-weight="700" font-size="19" fill="#FF8C00" letter-spacing="0.3">Technologies</text>
+</svg>
