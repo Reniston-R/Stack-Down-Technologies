@@ -9,7 +9,8 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Raleway:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+        <link rel="icon" href="/logo.svg" />
+        <link href="https://fonts.googleapis.com/css2?family=Afacad+Flux:wght@100..1000&family=Outfit:wght@300;400;600;800&family=Raleway:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
       </head>
       <body>{children}</body>

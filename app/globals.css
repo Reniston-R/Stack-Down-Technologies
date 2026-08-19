@@ -3,15 +3,15 @@
     --bg-card: #111111;
     --text-primary: #ffffff;
     --text-secondary: #b0b0b0;
-    --accent-orange: #FF6B00;
-    --accent-orange-light: #FF8C00;
-    --gradient-orange: linear-gradient(135deg, #FF6B00 0%, #FF8C00 100%);
+    --accent-orange: #EF3038;
+    --accent-orange-light: #FF5A60;
+    --gradient-orange: linear-gradient(135deg, #EF3038 0%, #FF5A60 100%);
     --glass-bg: rgba(17, 17, 17, 0.7);
-    --glass-border: rgba(255, 107, 0, 0.15);
+    --glass-border: rgba(239, 48, 56, 0.15);
     /* Legacy aliases for compatibility */
-    --accent-blue: #ff6200ff;
-    --accent-blue-light: #ff7700ff;
-    --gradient-blue: linear-gradient(135deg, #FF6B00 0%, #FF8C00 100%);
+    --accent-blue: #ef3038ff;
+    --accent-blue-light: #ff5a60ff;
+    --gradient-blue: linear-gradient(135deg, #EF3038 0%, #FF5A60 100%);
 }
 
 * {
@@ -65,12 +65,12 @@ h1, h2, h3, h4 {
 .btn-primary {
     background: var(--gradient-orange);
     color: white;
-    box-shadow: 0 4px 15px rgba(255, 107, 0, 0.35);
+    box-shadow: 0 4px 15px rgba(239, 48, 56, 0.35);
 }
 
 .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(255, 107, 0, 0.55);
+    box-shadow: 0 8px 24px rgba(239, 48, 56, 0.55);
 }
 
 .btn-secondary {
@@ -80,7 +80,7 @@ h1, h2, h3, h4 {
 }
 
 .btn-secondary:hover {
-    background: rgba(255, 107, 0, 0.12);
+    background: rgba(239, 48, 56, 0.12);
     transform: translateY(-2px);
 }
 
@@ -110,24 +110,71 @@ h1, h2, h3, h4 {
     display: flex;
     align-items: center;
     text-decoration: none;
+    gap: 12px;
 }
 
-.logo-svg {
-    height: 46px;
+.logo-img {
+    height: 48px;
     width: auto;
     transition: filter 0.3s ease, transform 0.3s ease;
+    border-radius: 4px;
 }
 
-.logo-svg:hover {
-    filter: drop-shadow(0 0 10px rgba(255, 107, 0, 0.75));
-    transform: scale(1.04);
+.logo-link:hover .logo-img {
+    filter: drop-shadow(0 0 8px rgba(239, 48, 56, 0.6));
+    transform: scale(1.05);
 }
 
-.footer-logo-svg {
+.logo-text-group {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    line-height: 1.1;
+}
+
+.logo-name {
+    font-family: 'Afacad Flux', sans-serif;
+    font-weight: 800;
+    font-size: 1.4rem;
+    color: var(--text-primary);
+    text-transform:uppercase,lowercase;
+    letter-spacing: 0.5px;
+}
+
+.logo-tag {
+    font-family: 'Afacad Flux', sans-serif;
+    font-weight: 500;
+    font-size: 0.95rem;
+    color: var(--accent-orange-light);
+    letter-spacing: 1.5px;
+}
+
+.brand-text {
+    font-family: 'Afacad Flux', sans-serif;
+    font-weight: 700;
+    color: var(--accent-orange-light);
+}
+
+.footer-logo-img {
     height: 60px;
-    width: auto;
-    display: block;
-    margin-bottom: 10px;
+}
+
+.footer-logo-name {
+    font-size: 1.8rem;
+}
+
+.footer-logo-tag {
+    font-size: 1.2rem;
+}
+
+.footer-tagline-italic {
+    font-family: 'Raleway', sans-serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: var(--accent-orange-light);
+    margin: 10px 0;
+    letter-spacing: 0.5px;
 }
 
 .footer-tagline {
@@ -187,7 +234,7 @@ h1, h2, h3, h4 {
     right: -10%;
     width: 50vw;
     height: 50vw;
-    background: radial-gradient(circle, rgba(255,107,0,0.18) 0%, rgba(0,0,0,0) 70%);
+    background: radial-gradient(circle, rgba(239,48,56,0.18) 0%, rgba(0,0,0,0) 70%);
     border-radius: 50%;
     z-index: -1;
 }
@@ -363,7 +410,7 @@ h1, h2, h3, h4 {
 .service-card:hover {
     transform: translateY(-10px);
     border-color: var(--accent-orange);
-    box-shadow: 0 10px 30px rgba(255, 107, 0, 0.18);
+    box-shadow: 0 10px 30px rgba(239, 48, 56, 0.18);
 }
 
 .service-card > * {
@@ -374,7 +421,7 @@ h1, h2, h3, h4 {
 .icon-wrapper {
     width: 60px;
     height: 60px;
-    background: rgba(255, 107, 0, 0.12);
+    background: rgba(239, 48, 56, 0.12);
     border-radius: 12px;
     display: flex;
     align-items: center;
@@ -421,7 +468,7 @@ h1, h2, h3, h4 {
     left: -50%;
     width: 200%;
     height: 200%;
-    background: radial-gradient(circle, rgba(255,107,0,0.12) 0%, transparent 50%);
+    background: radial-gradient(circle, rgba(239,48,56,0.12) 0%, transparent 50%);
     z-index: 0;
 }
 
@@ -492,7 +539,7 @@ h1, h2, h3, h4 {
 .info-item i {
     width: 40px;
     height: 40px;
-    background: rgba(255, 107, 0, 0.12);
+    background: rgba(239, 48, 56, 0.12);
     color: var(--accent-orange-light);
     border-radius: 50%;
     display: flex;

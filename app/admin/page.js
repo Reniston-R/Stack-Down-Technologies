@@ -6,7 +6,42 @@ import '../admin.css';
 
 export default function AdminPage() {
     const [activeSection, setActiveSection] = useState('dashboard');
+    const [submissions, setSubmissions] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
     const chartRefs = useRef({});
+
+    const fetchSubmissions = async () => {
+        setIsLoading(true);
+        try {
+            const response = await fetch('/api/contact');
+            if (response.ok) {
+                const data = await response.json();
+                setSubmissions(data);
+            }
+        } catch (error) {
+            console.error("Failed to fetch submissions:", error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const deleteSubmission = async (id) => {
+        if (!confirm("Are you sure you want to resolve and delete this submission?")) return;
+        try {
+            const response = await fetch(`/api/contact?id=${id}`, { method: 'DELETE' });
+            if (response.ok) {
+                setSubmissions(prev => prev.filter(s => s.id !== id));
+            }
+        } catch (error) {
+            console.error("Failed to delete submission:", error);
+        }
+    };
+
+    useEffect(() => {
+        fetchSubmissions();
+        const interval = setInterval(fetchSubmissions, 30000); // Auto refresh every 30s
+        return () => clearInterval(interval);
+    }, []);
 
     useEffect(() => {
         // We load Chart.js via CDN in layout, check if available
@@ -112,15 +147,15 @@ export default function AdminPage() {
             };
 
             // 3. Initialize Mini Charts for New Dashboard
-            createMiniChart('chart-mrr', [38000, 39500, 39000, 41000, 40500, 42000, 42500], '#0055ff'); // Accent Blue
+            createMiniChart('chart-mrr', [38000, 39500, 39000, 41000, 40500, 42000, 42500], '#EF3038'); // Accent Carol Red
             createMiniChart('chart-agency', [50000, 50000, 55000, 55000, 68200, 68200, 68200], '#ffffff'); // White
-            createMiniChart('chart-ai', [800, 850, 900, 880, 1100, 1150, 1200], '#3377ff'); // Light Blue
+            createMiniChart('chart-ai', [800, 850, 900, 880, 1100, 1150, 1200], '#FF5A60'); // Light Carol Red
 
             // 4. DAU / MAU Large Chart (Analytics Section)
             const dauMauCanvas = document.getElementById('chart-daumau');
             if (dauMauCanvas) {
                 const ctxDauMau = dauMauCanvas.getContext('2d');
-                const gradientDau = createGradient(ctxDauMau, 'rgba(0, 85, 255, 0.4)', 'rgba(0, 85, 255, 0.0)');
+                const gradientDau = createGradient(ctxDauMau, 'rgba(239, 48, 56, 0.4)', 'rgba(239, 48, 56, 0.0)');
                 const gradientMau = createGradient(ctxDauMau, 'rgba(255, 255, 255, 0.1)', 'rgba(255, 255, 255, 0.0)');
 
                 new Chart(ctxDauMau, {
@@ -131,7 +166,7 @@ export default function AdminPage() {
                             {
                                 label: 'DAU (Daily Active Users)',
                                 data: [4200, 4500, 4800, 5100, 5400, 5800, 6200],
-                                borderColor: '#0055ff',
+                                borderColor: '#EF3038',
                                 backgroundColor: gradientDau,
                                 borderWidth: 3,
                                 tension: 0.4,
@@ -227,8 +262,13 @@ export default function AdminPage() {
 
             <aside className="sidebar">
                 <div className="logo">
-                    <span className="logo-text">Action Tech <span className="highlight">Wave</span></span>
-                    <span className="logo-badge">HQ</span>
+                    <a href="/" className="logo-link" style={{ gap: '10px' }}>
+                        <img src="/logo.svg" alt="Stack Down Technologies" style={{ height: '32px', width: 'auto' }} />
+                        <div className="logo-text-group">
+                            <span className="logo-name" style={{ fontSize: '1rem' }}>Stack Down</span>
+                            <span className="logo-tag" style={{ fontSize: '0.7rem' }}>Tech HQ</span>
+                        </div>
+                    </a>
                 </div>
                 <nav className="sidebar-nav">
                     <a href="#dashboard" className="nav-item active"><i className="fas fa-chart-pie"></i> Home Dashboard</a>
@@ -243,7 +283,7 @@ export default function AdminPage() {
                     <a href="#team" className="nav-item"><i className="fas fa-user-shield"></i> Team & Access</a>
                 </nav>
                 <div className="sidebar-footer">
-                    <a href="index.html" className="btn-sm btn-outline" style={{ width: "100%", textAlign: "center", display: "block", textDecoration: "none" }}>
+                    <a href="/" className="btn-sm btn-outline" style={{ width: "100%", textAlign: "center", display: "block", textDecoration: "none" }}>
                         <i className="fas fa-external-link-alt"></i> View Live Site
                     </a>
                 </div>
@@ -263,7 +303,7 @@ export default function AdminPage() {
                             <span className="badge-dot"></span>
                         </div>
                         <div className="profile-avatar">
-                            <img src="https://ui-avatars.com/api/?name=Admin&background=8b5cf6&color=fff" alt="Admin" />
+                            <img src="https://ui-avatars.com/api/?name=Admin&background=EF3038&color=fff" alt="Admin" />
                             <span>Super Admin</span>
                         </div>
                     </div>
@@ -641,9 +681,55 @@ export default function AdminPage() {
 
 
                     <div id="support" className="section">
-                        <div className="section-header">
-                            <h2>Support & Tickets</h2>
-                            <p className="subtitle">Rule: ₹40,000+ MRR gets answered first</p>
+                        <div className="section-header flex-between">
+                            <div>
+                                <h2>Support & Tickets</h2>
+                                <p className="subtitle">Real-time user inquiries and tickets</p>
+                            </div>
+                            <button className="btn-sm btn-outline" onClick={fetchSubmissions} disabled={isLoading}>
+                                <i className={`fas fa-sync-alt ${isLoading ? 'fa-spin' : ''}`}></i> Refresh
+                            </button>
+                        </div>
+
+                        <div className="table-container mb-4">
+                            <div className="table-header">
+                                <h3>Contact Form Submissions</h3>
+                            </div>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>User</th>
+                                        <th>Message</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {submissions.length === 0 ? (
+                                        <tr>
+                                            <td colSpan="4" className="text-center text-secondary py-4">No new inquiries found.</td>
+                                        </tr>
+                                    ) : (
+                                        submissions.map(sub => (
+                                            <tr key={sub.id}>
+                                                <td className="text-xs text-secondary">{new Date(sub.date).toLocaleString()}</td>
+                                                <td>
+                                                    <div className="font-bold">{sub.name}</div>
+                                                    <div className="text-xs text-secondary">{sub.email}</div>
+                                                </td>
+                                                <td style={{ maxWidth: '300px', whiteSpace: 'normal', fontSize: '14px' }}>{sub.message}</td>
+                                                <td>
+                                                    <button className="btn-sm btn-action" onClick={() => deleteSubmission(sub.id)}>Resolve</button>
+                                                </td>
+                                            </tr>
+                                        ))
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div className="table-header">
+                            <h3>Internal Priority Tickets (Mock Data)</h3>
                         </div>
 
                         <div className="table-container">
@@ -808,7 +894,7 @@ export default function AdminPage() {
                                         <tr>
                                             <td>
                                                 <div className="font-bold">Super Admin (You)</div>
-                                                <div className="text-xs text-secondary">admin@actiontechwave.com</div>
+                                                <div className="text-xs text-secondary">admin@stackdowntech.com</div>
                                             </td>
                                             <td><span className="badge badge-danger">Owner</span></td>
                                             <td><i className="fas fa-shield-alt text-success"></i></td>
@@ -817,7 +903,7 @@ export default function AdminPage() {
                                         <tr>
                                             <td>
                                                 <div className="font-bold">Ramesh (CA)</div>
-                                                <div className="text-xs text-secondary">finance@actiontechwave.com</div>
+                                                <div className="text-xs text-secondary">finance@stackdowntech.com</div>
                                             </td>
                                             <td><span className="badge badge-warning">Finance</span></td>
                                             <td><i className="fas fa-shield-alt text-success"></i></td>

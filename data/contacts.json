@@ -1,0 +1,26 @@
+[
+  {
+    "id": "1780940760487",
+    "name": "Reniston R",
+    "email": "renyzsam@gmail.com",
+    "message": "hi",
+    "date": "2026-06-08T17:46:00.487Z",
+    "status": "new"
+  },
+  {
+    "id": "1777806396777",
+    "name": "Reniston R",
+    "email": "renyzsam@gmail.com",
+    "message": "jo",
+    "date": "2026-05-03T11:06:36.777Z",
+    "status": "new"
+  },
+  {
+    "id": "1777805206615",
+    "name": "Test User V2",
+    "email": "testv2@example.com",
+    "message": "This is a second test message after the fix.",
+    "date": "2026-05-03T10:46:46.615Z",
+    "status": "new"
+  }
+]

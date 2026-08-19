@@ -5,6 +5,40 @@ import { useEffect, useState } from "react";
 export default function Home() {
   const [isNavActive, setIsNavActive] = useState(false);
   const [isNavScrolled, setIsNavScrolled] = useState(false);
+  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState({ type: null, message: "" });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitStatus({ type: null, message: "" });
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        setSubmitStatus({ type: "success", message: "Message sent successfully!" });
+        setFormData({ name: "", email: "", message: "" });
+      } else {
+        const errorData = await response.json();
+        setSubmitStatus({ type: "error", message: errorData.error || "Failed to send message." });
+      }
+    } catch (error) {
+      setSubmitStatus({ type: "error", message: "Something went wrong. Please try again." });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   useEffect(() => {
     // Navbar background on scroll
@@ -54,36 +88,11 @@ export default function Home() {
       >
         <div className="logo">
           <a href="#home" className="logo-link">
-            <svg
-              className="logo-svg"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 300 65"
-              role="img"
-              aria-label="Stack Down Technologies"
-            >
-              {/* Bars left of square */}
-              <rect x="4" y="24" width="2.2" height="17" rx="1" fill="#FF6B00" opacity="0.20" />
-              <rect x="9" y="19" width="2.2" height="27" rx="1" fill="#FF6B00" opacity="0.36" />
-              <rect x="14" y="15" width="2.2" height="35" rx="1" fill="#FF6B00" opacity="0.52" />
-              <rect x="19" y="10" width="2.2" height="45" rx="1" fill="#FF6B00" opacity="0.70" />
-              <rect x="24" y="6" width="2.2" height="53" rx="1" fill="#FF6B00" opacity="0.88" />
-              {/* Solid orange square */}
-              <rect x="29" y="3" width="44" height="59" rx="2" fill="#FF6B00" />
-              {/* Bars right of square */}
-              <rect x="76" y="6" width="2.2" height="53" rx="1" fill="#FF6B00" opacity="0.88" />
-              <rect x="81" y="10" width="2.2" height="45" rx="1" fill="#FF6B00" opacity="0.70" />
-              <rect x="86" y="15" width="2.2" height="35" rx="1" fill="#FF6B00" opacity="0.52" />
-              <rect x="91" y="19" width="2.2" height="27" rx="1" fill="#FF6B00" opacity="0.36" />
-              <rect x="96" y="24" width="2.2" height="17" rx="1" fill="#FF6B00" opacity="0.20" />
-              {/* Stack Down */}
-              <text x="110" y="31" fontFamily="Raleway, sans-serif" fontWeight="800" fontSize="21" fill="#FFFFFF">
-                Stack Down
-              </text>
-              {/* Technologies */}
-              <text x="110" y="54" fontFamily="Raleway, sans-serif" fontWeight="700" fontSize="17" fill="#FFFFFF">
-                Technologies
-              </text>
-            </svg>
+            <img src="/logo.svg" alt="Stack Down Technologies" className="logo-img" />
+            <div className="logo-text-group">
+              <span className="logo-name">Stack Down</span>
+              <span className="logo-tag">Technologies</span>
+            </div>
           </a>
         </div>
         <ul className={`nav-links ${isNavActive ? "active" : ""}`}>
@@ -216,7 +225,7 @@ export default function Home() {
         <div className="about-grid">
           <div className="about-text" data-reveal="fade-up">
             <p>
-              At Stack Down Technologies, we believe in the power of technology to empower businesses. We are a
+              At <span className="brand-text">Stack Down Technologies</span>, we believe in the power of technology to empower businesses. We are a
               passionate team of developers, designers, and strategists dedicated to delivering high-quality SaaS
               solutions and digital marketing strategies.
             </p>
@@ -252,7 +261,7 @@ export default function Home() {
             <div className="info-items">
               <div className="info-item">
                 <i className="fas fa-envelope"></i>
-                <span>stackdowntechnologies.com</span>
+                <span>stackdown.com</span>
               </div>
               <div className="info-item">
                 <i className="fas fa-phone-alt"></i>
@@ -264,18 +273,52 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <form className="contact-form" data-reveal="fade-up" data-delay="200">
+          <form className="contact-form" onSubmit={handleSubmit} data-reveal="fade-up" data-delay="200">
             <div className="form-group">
-              <input type="text" placeholder="Your Name" required />
+              <input 
+                type="text" 
+                name="name"
+                placeholder="Your Name" 
+                value={formData.name}
+                onChange={handleInputChange}
+                required 
+              />
             </div>
             <div className="form-group">
-              <input type="email" placeholder="Your Email" required />
+              <input 
+                type="email" 
+                name="email"
+                placeholder="Your Email" 
+                value={formData.email}
+                onChange={handleInputChange}
+                required 
+              />
             </div>
             <div className="form-group">
-              <textarea placeholder="Your Message" rows="5" required></textarea>
+              <textarea 
+                name="message"
+                placeholder="Your Message" 
+                rows="5" 
+                value={formData.message}
+                onChange={handleInputChange}
+                required
+              ></textarea>
             </div>
-            <button type="submit" className="btn btn-primary">
-              Send Message
+            {submitStatus.message && (
+              <div className={`submit-status ${submitStatus.type}`} style={{ 
+                marginBottom: '15px', 
+                padding: '10px', 
+                borderRadius: '5px',
+                backgroundColor: submitStatus.type === 'success' ? 'rgba(34, 197, 94, 0.2)' : 'rgba(239, 68, 68, 0.2)',
+                color: submitStatus.type === 'success' ? '#22c55e' : '#ef4444',
+                fontSize: '14px',
+                fontWeight: '500'
+              }}>
+                {submitStatus.message}
+              </div>
+            )}
+            <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
+              {isSubmitting ? "Sending..." : "Send Message"}
             </button>
           </form>
         </div>
@@ -284,42 +327,16 @@ export default function Home() {
       <footer className="footer">
         <div className="footer-content">
           <div className="footer-brand">
-            <svg
-              className="footer-logo-svg"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 340 88"
-              role="img"
-              aria-label="Stack Down Technologies"
-            >
-              <rect x="4" y="29" width="2.5" height="22" rx="1" fill="#FF6B00" opacity="0.20" />
-              <rect x="10" y="23" width="2.5" height="34" rx="1" fill="#FF6B00" opacity="0.36" />
-              <rect x="16" y="17" width="2.5" height="46" rx="1" fill="#FF6B00" opacity="0.52" />
-              <rect x="22" y="11" width="2.5" height="58" rx="1" fill="#FF6B00" opacity="0.70" />
-              <rect x="28" y="6" width="2.5" height="68" rx="1" fill="#FF6B00" opacity="0.88" />
-              <rect x="34" y="3" width="52" height="74" rx="2" fill="#FF6B00" />
-              <rect x="89" y="6" width="2.5" height="68" rx="1" fill="#FF6B00" opacity="0.88" />
-              <rect x="95" y="11" width="2.5" height="58" rx="1" fill="#FF6B00" opacity="0.70" />
-              <rect x="101" y="17" width="2.5" height="46" rx="1" fill="#FF6B00" opacity="0.52" />
-              <rect x="107" y="23" width="2.5" height="34" rx="1" fill="#FF6B00" opacity="0.36" />
-              <rect x="113" y="29" width="2.5" height="22" rx="1" fill="#FF6B00" opacity="0.20" />
-              <text x="130" y="38" fontFamily="Raleway, sans-serif" fontWeight="800" fontSize="26" fill="#FFFFFF">
-                Stack Down
-              </text>
-              <text x="130" y="64" fontFamily="Raleway, sans-serif" fontWeight="700" fontSize="21" fill="#FFFFFF">
-                Technologies
-              </text>
-              <text
-                x="130"
-                y="82"
-                fontFamily="Raleway, sans-serif"
-                fontWeight="500"
-                fontSize="11"
-                fontStyle="italic"
-                fill="#FF8C00"
-              >
-                Transform Your Ideas Into Digital Reality
-              </text>
-            </svg>
+            <div className="logo">
+              <a href="#home" className="logo-link">
+                <img src="/logo.svg" alt="Stack Down Technologies" className="logo-img footer-logo-img" />
+                <div className="logo-text-group">
+                  <span className="logo-name footer-logo-name">Stack Down</span>
+                  <span className="logo-tag footer-logo-tag">Technologies</span>
+                </div>
+              </a>
+            </div>
+            <p className="footer-tagline-italic">Transform Your Ideas Into Digital Reality</p>
             <p>Empowering the future of business with cutting-edge tech.</p>
           </div>
           <div className="footer-links">
@@ -349,7 +366,7 @@ export default function Home() {
           </div>
         </div>
         <div className="footer-bottom">
-          <p>&copy; 2026 Stack Down Technologies Pvt. Ltd. | All rights reserved.</p>
+          <p>&copy; 2026 <span className="brand-text">Stack Down Technologies</span> Pvt. Ltd. | All rights reserved.</p>
         </div>
       </footer>
     </>
